@@ -4,257 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내리GO - 버스 졸음 방지 & 실시간 도착 알람</title>
+    <meta name="description" content="버스·지하철에서 푹 자도 괜찮아요. 내릴 정류장·역 근처에 오면 소리와 진동으로 깨워주는 하차 알람 앱, 내리GO.">
+    <meta name="theme-color" content="#e85d56">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="내리GO - 하차 알람 앱">
+    <meta property="og:description" content="내릴 정류장·역 근처에 오면 소리와 진동으로 깨워드려요. 실시간 버스 도착정보 포함.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚌%3C/text%3E%3C/svg%3E">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background: linear-gradient(160deg, #e8f8f2 0%, #fffdf7 100%);
-            color: #3b281e;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 28px 18px 40px;
-            text-align: center;
-        }
-        .container {
-            max-width: 480px;
-            width: 100%;
-            background: #ffffff;
-            padding: 36px 22px 28px;
-            border-radius: 32px;
-            box-shadow: 0 16px 40px rgba(92, 58, 33, 0.08);
-            border: 2px solid #e2f5ed;
-        }
-        .top-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #ffeef0;
-            color: #d94645;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 999px;
-            margin-bottom: 18px;
-        }
-        .icon-wrapper {
-            position: relative;
-            width: 108px;
-            height: 108px;
-            margin: 0 auto 16px;
-            animation: floatLogo 2.8s ease-in-out infinite;
-        }
-        .app-logo-svg {
-            width: 100%;
-            height: 100%;
-            border-radius: 24px;
-            box-shadow: 0 10px 24px rgba(92, 58, 33, 0.14);
-        }
-        .bell-badge {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background: #e85d56;
-            color: #fff;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            border: 3px solid #fff;
-            box-shadow: 0 4px 10px rgba(232, 93, 86, 0.35);
-        }
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-        h1 {
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            color: #3b281e;
-        }
-        .highlight {
-            color: #e85d56;
-        }
-        .subtitle {
-            font-size: 15px;
-            color: #645348;
-            margin-bottom: 24px;
-            line-height: 1.55;
-            font-weight: 500;
-            word-break: keep-all;
-        }
-        .cta-area {
-            margin-bottom: 28px;
-        }
-        .download-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            background: linear-gradient(135deg, #e85d56 0%, #d6453d 100%);
-            color: white;
-            font-size: 17px;
-            font-weight: 800;
-            padding: 18px 24px;
-            border-radius: 20px;
-            text-decoration: none;
-            box-shadow: 0 8px 20px rgba(232, 93, 86, 0.3);
-            transition: transform 0.15s ease;
-        }
-        .download-btn:active {
-            transform: scale(0.97);
-        }
-        .cta-subtext {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #7d6b5d;
-            font-weight: 600;
-        }
-        .steps-box {
-            background-color: #f3fbf8;
-            border: 1.5px solid #c9efe0;
-            border-radius: 22px;
-            padding: 16px 12px;
-            margin-bottom: 24px;
-        }
-        .steps-title {
-            font-size: 12px;
-            font-weight: 800;
-            color: #208b69;
-            margin-bottom: 12px;
-        }
-        .steps-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 700;
-            color: #3b281e;
-        }
-        .step-pill {
-            flex: 1;
-            background: #ffffff;
-            padding: 10px 6px;
-            border-radius: 14px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-        }
-        .step-pill span {
-            display: block;
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
-        .step-arrow {
-            color: #6bc4a6;
-            font-weight: 900;
-            padding: 0 4px;
-        }
-        .features {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            text-align: left;
-        }
-        .feature-card {
-            display: flex;
-            align-items: flex-start;
-            background-color: #fafbfc;
-            padding: 16px;
-            border-radius: 20px;
-            border: 1px solid #f0f2f5;
-        }
-        .feature-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            margin-right: 14px;
-            flex-shrink: 0;
-        }
-        .icon-mint { background-color: #d8f5e9; }
-        .icon-coral { background-color: #ffe4e2; }
-        .icon-yellow { background-color: #fff3cd; }
-        .icon-purple { background-color: #f3e8ff; }
-        .feature-text h3 {
-            font-size: 15px;
-            font-weight: 800;
-            color: #2c1e16;
-            margin-bottom: 4px;
-        }
-        .feature-text p {
-            font-size: 13px;
-            color: #6e5f56;
-            line-height: 1.45;
-            word-break: keep-all;
-        }
-        .privacy-section {
-            margin-top: 26px;
-            border-top: 1px dashed #e5e0dc;
-            padding-top: 18px;
-            text-align: left;
-        }
-        .toggle-btn {
-            width: 100%;
-            background-color: #f7f5f3;
-            color: #5c4b40;
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .privacy-content {
-            display: none;
-            margin-top: 12px;
-            padding: 18px 16px;
-            background-color: #faf9f8;
-            border-radius: 16px;
-            line-height: 1.65;
-            color: #4b3e36;
-            font-size: 12px;
-            border: 1px solid #ebe6e1;
-            max-height: 380px;
-            overflow-y: auto;
-        }
-        .privacy-content.open {
-            display: block;
-        }
-        .privacy-content h4 {
-            font-size: 13px;
-            color: #2c1e16;
-            margin-top: 14px;
-            margin-bottom: 6px;
-        }
-        .privacy-content ul {
-            padding-left: 18px;
-            margin-bottom: 8px;
-        }
-        .privacy-content a {
-            color: #e85d56;
-            font-weight: 700;
-            text-decoration: underline;
-        }
-        .footer {
-            margin-top: 18px;
-            font-size: 12px;
-            color: #a3968c;
-            font-weight: 500;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: linear-gradient(160deg, #e8f8f2 0%, #fffdf7 100%); color: #3b281e; display: flex; flex-direction: column; align-items: center; min-height: 100vh; min-height: 100dvh; padding: 28px 18px 40px; text-align: center; }
+        .container { max-width: 480px; width: 100%; background: #fff; padding: 36px 22px 28px; border-radius: 32px; box-shadow: 0 16px 40px rgba(92,58,33,.08); border: 2px solid #e2f5ed; }
+        .top-badge { display: inline-flex; align-items: center; gap: 6px; background: #ffeef0; color: #d94645; font-size: 13px; font-weight: 800; padding: 6px 14px; border-radius: 999px; margin-bottom: 18px; }
+        .icon-wrapper { position: relative; width: 108px; height: 108px; margin: 0 auto 16px; animation: floatLogo 2.8s ease-in-out infinite; }
+        .app-logo-svg { width: 100%; height: 100%; border-radius: 24px; box-shadow: 0 10px 24px rgba(92,58,33,.14); }
+        .bell-badge { position: absolute; top: -6px; right: -6px; background: #e85d56; color: #fff; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(232,93,86,.35); }
+        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @media (prefers-reduced-motion: reduce) { .icon-wrapper { animation: none; } }
+        h1 { font-size: 30px; font-weight: 900; letter-spacing: -.5px; margin-bottom: 8px; }
+        .highlight { color: #e85d56; }
+        .subtitle { font-size: 15px; color: #645348; margin-bottom: 24px; line-height: 1.55; font-weight: 500; word-break: keep-all; }
+        .cta-area { margin-bottom: 28px; }
+        .download-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #e85d56, #d6453d); color: #fff; font-size: 17px; font-weight: 800; padding: 18px 24px; border-radius: 20px; text-decoration: none; box-shadow: 0 8px 20px rgba(232,93,86,.3); transition: transform .15s ease; }
+        .download-btn:active { transform: scale(.97); }
+        .cta-subtext { margin-top: 10px; font-size: 12px; color: #6e5f56; font-weight: 600; }
+        .steps-box { background: #f3fbf8; border: 1.5px solid #c9efe0; border-radius: 22px; padding: 16px 12px; margin-bottom: 24px; }
+        .steps-title { font-size: 12px; font-weight: 800; color: #1a7a5c; margin-bottom: 12px; }
+        .steps-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 700; }
+        .step-pill { flex: 1; background: #fff; padding: 10px 6px; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.04); }
+        .step-pill span { display: block; font-size: 18px; margin-bottom: 4px; }
+        .step-arrow { color: #6bc4a6; font-weight: 900; padding: 0 4px; }
+        .features { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+        .feature-card { display: flex; align-items: flex-start; background: #fafbfc; padding: 16px; border-radius: 20px; border: 1px solid #f0f2f5; }
+        .feature-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-right: 14px; flex-shrink: 0; }
+        .icon-mint { background: #d8f5e9; } .icon-coral { background: #ffe4e2; } .icon-yellow { background: #fff3cd; } .icon-purple { background: #f3e8ff; } .icon-blue { background: #dbeafe; }
+        .feature-text h3 { font-size: 15px; font-weight: 800; color: #2c1e16; margin-bottom: 4px; }
+        .feature-text p { font-size: 13px; color: #6e5f56; line-height: 1.45; word-break: keep-all; }
+        .privacy-section { margin-top: 26px; border-top: 1px dashed #e5e0dc; padding-top: 18px; text-align: left; }
+        .toggle-btn { width: 100%; background: #f7f5f3; color: #5c4b40; border: none; padding: 12px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .privacy-content { display: none; margin-top: 12px; padding: 18px 16px; background: #faf9f8; border-radius: 16px; line-height: 1.65; color: #4b3e36; font-size: 12px; border: 1px solid #ebe6e1; max-height: 420px; overflow-y: auto; }
+        .privacy-content.open { display: block; }
+        .privacy-content h4 { font-size: 13px; color: #2c1e16; margin-top: 14px; margin-bottom: 6px; }
+        .privacy-content ul { padding-left: 18px; margin-bottom: 8px; }
+        .privacy-content a { color: #d6453d; font-weight: 700; text-decoration: underline; }
+        .footer { margin-top: 18px; font-size: 12px; color: #857769; font-weight: 500; }
+        a:focus-visible, button:focus-visible { outline: 3px solid #208b69; outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -262,9 +55,8 @@
     <div class="container">
         <div class="top-badge">😴 버스에서 푹 자도 괜찮아요!</div>
 
-        <!-- 이미지 파일 업로드 없이도 깨지지 않는 내장형 내리GO 공식 로고 -->
         <div class="icon-wrapper">
-            <svg class="app-logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <svg class="app-logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="내리GO 로고">
                 <rect width="200" height="200" rx="42" fill="#ffffff"/>
                 <path d="M28 42 C28 30, 38 24, 50 24 L125 24 C158 24, 176 45, 176 80 L176 152 C176 168, 164 176, 148 176 L48 176 C35 176, 28 166, 28 152 Z" fill="#98e2c6" stroke="#5c3a21" stroke-width="8" stroke-linejoin="round"/>
                 <path d="M52 82 C52 58, 72 48, 102 48 C132 48, 152 58, 152 82 L152 118 C152 130, 142 136, 128 136 L76 136 C62 136, 52 130, 52 118 Z" fill="#ffffff" stroke="#5c3a21" stroke-width="7" stroke-linejoin="round"/>
@@ -277,15 +69,13 @@
 
         <h1>내리<span class="highlight">GO</span></h1>
         <p class="subtitle">
-            출퇴근·등하교 버스 완벽한 하차 알람!<br>
-            내릴 정류장 근처에 오면 소리와 진동으로 깨워드려요.
+            버스·지하철 완벽한 하차 알람!<br>
+            내릴 정류장·역 근처에 오면 소리와 진동으로 깨워드려요.
         </p>
 
         <div class="cta-area">
-            <a href="https://apps.apple.com/app/id6822344073" class="download-btn">
-                <span> App Store에서 무료로 받기</span>
-            </a>
-            <div class="cta-subtext">✨ 회원가입 없음 • 바로 시작 • 실시간 버스 도착정보</div>
+            <a href="https://apps.apple.com/app/id6822344073" class="download-btn">App Store에서 무료로 받기</a>
+            <div class="cta-subtext">✨ 회원가입 없음 • 바로 시작 • 실시간 버스·지하철 도착정보</div>
         </div>
 
         <div class="steps-box">
@@ -308,83 +98,111 @@
                 </div>
             </div>
             <div class="feature-card">
+                <div class="feature-icon icon-blue">🚇</div>
+                <div class="feature-text">
+                    <h3>전국 지하철역 하차 알림</h3>
+                    <p>수도권은 물론 부산·대구·대전·광주 지하철까지. 약 한 정거장 전에 미리 알려드려요.</p>
+                </div>
+            </div>
+            <div class="feature-card">
                 <div class="feature-icon icon-coral">📱</div>
                 <div class="feature-text">
                     <h3>잠금화면 실시간 남은 거리</h3>
-                    <p>앱을 켜두지 않아도 잠금화면과 다이나믹 아일랜드에서 목적지까지 남은 거리를 실시간으로 보여줘요.</p>
+                    <p>앱을 켜두지 않아도 잠금화면과 다이나믹 아일랜드에서 목적지까지 남은 거리를 보여주고, 알람도 바로 끌 수 있어요.</p>
                 </div>
             </div>
             <div class="feature-card">
                 <div class="feature-icon icon-yellow">🎧</div>
                 <div class="feature-text">
                     <h3>음악 중에도 선명한 알람 & 커스텀 사운드</h3>
-                    <p>유튜브나 음악을 듣고 있어도 배경 소리가 자연스럽게 줄어들며, 내가 녹음한 소리나 알람이 또렷하게 울립니다.</p>
+                    <p>유튜브나 음악을 듣고 있어도 배경 소리가 줄어들며, 내가 녹음한 목소리나 MP3 알람이 또렷하게 울립니다.</p>
                 </div>
             </div>
             <div class="feature-card">
                 <div class="feature-icon icon-purple">⭐</div>
                 <div class="feature-text">
                     <h3>원터치 즐겨찾기 1초 시작</h3>
-                    <p>자주 내리는 정류장에 별(★)을 눌러두면, 다음부턴 터치 한 번으로 바로 하차 알람이 켜집니다.</p>
+                    <p>자주 내리는 정류장·역에 별(★)을 눌러두면, 다음부턴 터치 한 번으로 바로 하차 알람이 켜집니다.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 개인정보 처리방침 및 서비스 이용약관 (클릭 시 확실하게 열리는 버튼 방식) -->
-        <div class="privacy-section">
-            <button type="button" class="toggle-btn" onclick="var el=document.getElementById('policyBox'); el.classList.toggle('open');">
+        <div class="privacy-section" id="privacy">
+            <button type="button" id="policyToggle" class="toggle-btn" aria-expanded="false" aria-controls="policyBox">
                 📜 개인정보 처리방침 및 서비스 이용약관 보기 ▾
             </button>
             <div id="policyBox" class="privacy-content">
                 <strong>[내리GO] 개인정보 처리방침 및 서비스 이용약관</strong><br>
-                <span style="color:#888;">최종 수정일: 2026년 10월 12일</span><br><br>
-                본 페이지는 '내리GO' 애플리케이션(이하 "앱")의 개인정보 처리방침과 유료 정기 구독 서비스 이용약관을 규정합니다.
+                <span style="color:#6e5f56;">최종 수정일: 2026년 11월 17일</span><br><br>
+                본 문서는 '내리GO' 애플리케이션(이하 "앱")의 개인정보 처리방침과 유료 정기 구독 서비스 이용약관을 규정합니다.
 
                 <h4>1. 개인정보 처리방침 (Privacy Policy)</h4>
                 <strong>제1조 (수집하는 정보 및 이용 목적)</strong><br>
-                본 앱은 별도의 회원가입이나 계정 로그인을 요구하지 않으며, 서버로 개인 식별 정보를 전송하거나 저장하지 않습니다.
+                본 앱은 회원가입이나 계정 로그인을 요구하지 않으며, 개발자의 서버로 개인 식별 정보를 전송·저장하지 않습니다.
                 <ul>
-                    <li><strong>위치 정보 (GPS 및 네트워크 기반):</strong> 사용자가 설정한 하차 목적지(정류장/역)와의 거리를 실시간으로 측정하여 도착 알람을 제공하기 위해서만 사용됩니다. 위치 정보는 사용자의 스마트폰 기기 내부에서만 즉시 처리되며, 외부 서버에 저장되거나 수집되지 않습니다.</li>
-                    <li><strong>로컬 저장 데이터:</strong> 즐겨찾기 목록, 사용자가 직접 녹음하거나 추가한 커스텀 알람 음원 파일은 기기 내부 저장소(App Sandbox)에만 안전하게 보관됩니다.</li>
+                    <li><strong>위치 정보:</strong> 사용자가 설정한 하차 목적지와의 거리를 측정해 도착 알람을 제공하기 위해 사용하며, 화면이 꺼지거나 앱이 백그라운드에 있어도 알람이 동작하도록 "항상 허용" 권한을 요청할 수 있습니다. 거리 계산은 기기 내부에서 처리되며 개발자 서버에 저장되지 않습니다.</li>
+                    <li><strong>주변 정류장·도착정보 조회:</strong> 지도 중심 좌표 및 검색어는 주변 정류장, 지하철역, 실시간 도착 정보를 조회하기 위해 공공데이터 API(국토교통부 TAGO, 서울특별시 TOPIS, 경기도 GBIS) 및 Apple 지도(MapKit)로 전송될 수 있습니다. 이 정보는 개인을 식별하지 않으며 개발자가 보관하지 않습니다.</li>
+                    <li><strong>마이크:</strong> '내 목소리로 알람 녹음' 기능을 사용할 때에 한해 마이크 권한을 사용하며, 녹음 파일은 기기 내부에만 저장됩니다.</li>
+                    <li><strong>알림:</strong> 목적지 도착 알림을 표시하기 위해 알림 권한을 사용합니다.</li>
+                    <li><strong>로컬 저장 데이터:</strong> 즐겨찾기, 최근 목적지, 설정값, 커스텀 알람 음원은 기기 내부 저장소(App Sandbox)에만 보관됩니다.</li>
                 </ul>
 
-                <strong>제2조 (제3자 광고 및 결제 SDK)</strong><br>
-                앱 서비스 유지 및 수익 창출을 위해 다음의 공인된 외부 SDK를 포함하고 있습니다:
+                <strong>제2조 (제3자 광고 및 결제 SDK)</strong>
                 <ul>
-                    <li><strong>Google AdMob:</strong> 배너 광고, 전면 광고, 보상형 광고 노출을 위해 비식별 기기 광고 식별자(IDFA)를 활용할 수 있습니다.</li>
-                    <li><strong>Apple In-App Purchase (StoreKit):</strong> 정기 구독 결제 및 영수증 확인은 Apple의 암호화된 공식 결제 시스템을 통해 안전하게 처리됩니다.</li>
+                    <li><strong>Google AdMob:</strong> 배너·전면·보상형 광고 노출을 위해 광고 식별자(IDFA) 등 기기 정보를 활용할 수 있습니다. 구독자 및 프로모션 코드 사용자에게는 광고가 일부 또는 전부 제거됩니다.</li>
+                    <li><strong>Apple In-App Purchase (StoreKit):</strong> 구독 결제 및 영수증 확인은 Apple의 공식 결제 시스템을 통해 처리됩니다.</li>
                 </ul>
 
                 <strong>제3조 (데이터 파기)</strong><br>
-                앱을 기기에서 삭제(제거)할 경우, 기기 내부에 저장된 모든 설정 데이터와 오디오 파일은 즉시 영구 파기됩니다.
+                앱을 기기에서 삭제하면 기기 내부에 저장된 모든 설정 데이터와 오디오 파일이 함께 삭제됩니다.
 
                 <h4>2. 서비스 이용약관 및 정기 구독 정책 (Terms of Use)</h4>
                 <strong>제1조 (서비스 내용)</strong><br>
-                '내리GO'는 대중교통 이용자를 위한 위치 기반 하차 알림 서비스 및 커스텀 사운드 설정 기능을 제공합니다.<br><br>
+                '내리GO'는 대중교통 이용자를 위한 위치 기반 하차 알림, 실시간 도착 정보, 커스텀 사운드 기능을 제공합니다. 위치 정확도, 통신 상태, 공공데이터 제공 상황에 따라 알람이나 도착 정보가 지연·누락될 수 있으므로 중요한 일정에는 보조 수단을 함께 사용하시기 바랍니다.<br><br>
 
-                <strong>제2조 (내리GO 프리미엄 자동 갱신 정기 구독)</strong><br>
-                본 앱은 광고 제거 및 프리미엄 기능을 제공하는 정기 구독 플랜을 제공합니다:
+                <strong>제2조 (내리GO 프리미엄 자동 갱신 정기 구독)</strong>
                 <ul>
                     <li><strong>구독 플랜:</strong> 월간 구독 ₩1,900 / 월 (VAT 포함), 연간 구독 ₩4,900 / 년 (VAT 포함)</li>
-                    <li><strong>프리미엄 혜택:</strong> 앱 시작 시 전면 광고 제거, 하단 배너 광고 제거, 즐겨찾기 추가 및 커스텀 사운드 무제한 이용 (보상형 광고 제거)</li>
-                    <li><strong>결제 및 자동 갱신:</strong> 구매 확정 시 비용은 사용자의 Apple ID 계정으로 청구됩니다. 현재 구독 기간 종료 최소 24시간 전에 구독을 해지하지 않으면 동일한 금액으로 자동 갱신됩니다.</li>
-                    <li><strong>구독 해지 및 환불:</strong> 사용자는 언제든지 iPhone의 [설정] ➔ [사용자 Apple ID] ➔ [구독]에서 구독을 취소할 수 있습니다. 환불 및 결제 취소는 Apple 미디어 서비스 이용약관 및 환불 정책을 따릅니다.</li>
+                    <li><strong>프리미엄 혜택:</strong> 앱 시작 시 전면 광고 제거, 하단 배너 광고 제거, 즐겨찾기 추가 및 커스텀 사운드 등록 시 광고 시청 면제</li>
+                    <li><strong>결제 및 자동 갱신:</strong> 구매 확정 시 비용은 Apple ID 계정으로 청구됩니다. 현재 구독 기간 종료 최소 24시간 전에 해지하지 않으면 동일한 금액으로 자동 갱신됩니다.</li>
+                    <li><strong>구독 해지 및 환불:</strong> iPhone의 [설정] ➔ [사용자 Apple ID] ➔ [구독]에서 언제든 취소할 수 있습니다. 환불은 Apple의 환불 정책을 따릅니다.</li>
                 </ul>
 
                 <strong>제3조 (표준 최종 사용자 라이선스 계약)</strong><br>
-                본 앱은 Apple의 표준 최종 사용자 라이선스 계약(EULA)을 준수합니다.<br>
-                👉 <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener noreferrer">Apple 표준 EULA 전문 링크</a>
+                본 앱은 Apple의 표준 EULA를 따릅니다.<br>
+                👉 <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener noreferrer">Apple 표준 EULA 전문</a>
 
-                <h4>3. 개발자 연락처 및 고객 지원</h4>
-                앱 사용 중 버그 제보, 문의 사항 또는 개인정보 관련 문의는 아래 연락처로 접수해 주시기 바랍니다:<br>
-                - 담당자 이메일: <a href="mailto:naerigo815@gmail.com">naerigo815@gmail.com</a>
+                <h4>3. 데이터 출처</h4>
+                대중교통 데이터는 국토교통부(TAGO), 서울특별시(TOPIS), 경기도(GBIS), 전국도시철도역사정보표준데이터(공공데이터포털)를 이용하며, 공공누리 제1유형 조건에 따라 출처를 표시합니다.
+
+                <h4>4. 개발자 연락처 및 고객 지원</h4>
+                버그 제보, 문의, 개인정보 관련 문의:<br>
+                - 이메일: <a href="mailto:naerigo815@gmail.com">naerigo815@gmail.com</a>
             </div>
         </div>
 
-        <div class="footer">
-            &copy; 내리GO. All rights reserved.
-        </div>
+        <div class="footer">&copy; 내리GO. All rights reserved.</div>
     </div>
 
+    <script>
+        (function () {
+            var btn = document.getElementById('policyToggle');
+            var box = document.getElementById('policyBox');
+            function setOpen(open) {
+                box.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            btn.addEventListener('click', function () { setOpen(!box.classList.contains('open')); });
+            // 사이트주소/#privacy 로 접속하면 약관이 바로 펼쳐집니다 (앱 내 링크·App Store 개인정보 URL용)
+            function checkHash() {
+                if (location.hash === '#privacy') {
+                    setOpen(true);
+                    document.getElementById('privacy').scrollIntoView();
+                }
+            }
+            checkHash();
+            window.addEventListener('hashchange', checkHash);
+        })();
+    </script>
 </body>
 </html>
